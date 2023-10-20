@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Button,
@@ -9,9 +8,27 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react";
-import { backgroundtelegram } from "src/utils/img";
+import Api from "../../Api";
+import React, { useState } from "react";
 
 const Login = (): JSX.Element => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+
+  const submit = async () => {
+    try {
+      const datos = { email, password };
+      const token = await Api.post("/auth/login", datos);
+      localStorage.setItem("t", JSON.stringify(token.data));
+      alert("Usuário Logado");
+    } catch (error) {
+      console.log(error)
+      alert(error)
+
+    }
+  };
+
   return (
     <Box
       width={"100vw"}
@@ -24,7 +41,12 @@ const Login = (): JSX.Element => {
       }
       backgroundRepeat={"repeat"}
     >
-      <Box width={"100vw"} height={"100vh"} position={"absolute"} backgroundColor={"#80808080"}></Box>
+      <Box
+        width={"100vw"}
+        height={"100vh"}
+        position={"absolute"}
+        backgroundColor={"#80808080"}
+      ></Box>
       <Flex
         margin={"auto"}
         flexDirection={"column"}
@@ -50,6 +72,9 @@ const Login = (): JSX.Element => {
             padding={"0.6rem"}
             width={"20rem"}
             borderRadius={"0.5rem"}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
           />
         </FormControl>
 
@@ -61,6 +86,9 @@ const Login = (): JSX.Element => {
             padding={"0.6rem"}
             width={"20rem"}
             borderRadius={"0.5rem"}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
         </FormControl>
 
@@ -70,6 +98,7 @@ const Login = (): JSX.Element => {
           width="full"
           padding={"0.6rem 2rem"}
           borderRadius={"0.5rem"}
+          onClick={submit}
         >
           Entrar
         </Button>
